@@ -1,0 +1,31 @@
+# .htaccess — TechStore
+# =====================================================
+# REQUISITO: Proibir listagem de diretórios
+# =====================================================
+Options -Indexes
+
+# Segurança: bloquear acesso direto a arquivos PHP de config/includes
+<FilesMatch "^(database|functions|header|footer|card_produto)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Permitir acesso a páginas públicas
+<FilesMatch "^(index|produtos|produto|carrinho)\.php$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Cabeçalhos de segurança
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Página de erro customizada
+ErrorDocument 403 /loja/index.php
+ErrorDocument 404 /loja/index.php
+
+# Encoding
+AddDefaultCharset UTF-8

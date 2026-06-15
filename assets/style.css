@@ -1,0 +1,316 @@
+/* =====================================================
+   TechStore — CSS Profissional
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --gold: #f0b90b;
+  --gold-dark: #d4a000;
+  --dark: #0d0d0d;
+  --dark2: #1a1a2e;
+  --text: #1c1c1e;
+  --text-muted: #6b7280;
+  --bg-light: #f8f9fa;
+  --radius: 14px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-hover: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f5f5f7;
+  color: var(--text);
+}
+
+/* =====================================================
+   NAVBAR
+   ===================================================== */
+.navbar {
+  background: var(--dark) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 10px 0;
+}
+.navbar-brand {
+  font-size: 1.4rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.5px;
+}
+.navbar .form-control {
+  border-radius: 50px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  padding: 8px 18px;
+  font-size: 0.88rem;
+}
+.navbar .form-control::placeholder { color: rgba(255,255,255,0.4); }
+.navbar .form-control:focus {
+  background: rgba(255,255,255,0.15);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(240,185,11,0.2);
+  color: #fff;
+}
+.navbar .btn-warning {
+  border-radius: 50px;
+  padding: 8px 16px;
+  font-weight: 600;
+}
+
+/* =====================================================
+   HERO / CAROUSEL
+   ===================================================== */
+.carousel-item > div {
+  position: relative;
+  overflow: hidden;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 60px 20px;
+}
+.hero-content h1 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+/* =====================================================
+   SEÇÕES
+   ===================================================== */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* =====================================================
+   CARDS DE CATEGORIA
+   ===================================================== */
+.categoria-card {
+  border-radius: var(--radius) !important;
+  transition: all 0.25s ease;
+  border: 1.5px solid #e5e7eb !important;
+  background: #fff;
+}
+.categoria-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold) !important;
+  box-shadow: 0 8px 24px rgba(240,185,11,0.15) !important;
+}
+.categoria-card .emoji-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+/* =====================================================
+   CARDS DE PRODUTO
+   ===================================================== */
+.produto-card {
+  border-radius: var(--radius) !important;
+  border: 1px solid #e5e7eb !important;
+  background: #fff;
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+.produto-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover) !important;
+  border-color: transparent !important;
+}
+.produto-card .card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  background: #f8f8f8;
+  height: 200px;
+}
+.produto-card .card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.produto-card:hover .card-img-wrapper img {
+  transform: scale(1.05);
+}
+.produto-card .badge-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+.produto-card .badge-destaque {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+.produto-card .card-body {
+  padding: 16px;
+}
+.produto-card .categoria-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+.produto-card .card-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.35;
+  min-height: 38px;
+  color: var(--text);
+}
+.produto-card .preco-original {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+.produto-card .preco-atual {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #16a34a;
+  letter-spacing: -0.5px;
+}
+.produto-card .parcelamento {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.produto-card .btn-carrinho {
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  border-radius: 50px;
+  padding: 9px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.produto-card .btn-carrinho:hover {
+  background: var(--gold-dark);
+  transform: translateY(-1px);
+}
+.produto-card .btn-detalhe {
+  border: 1.5px solid #e5e7eb;
+  color: var(--text);
+  border-radius: 50px;
+  padding: 9px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  background: transparent;
+}
+.produto-card .btn-detalhe:hover {
+  border-color: var(--dark);
+  background: var(--dark);
+  color: #fff;
+}
+
+/* =====================================================
+   BADGE DE DESCONTO
+   ===================================================== */
+.badge-desconto {
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 50px;
+}
+.badge-destaque-pill {
+  background: var(--gold);
+  color: var(--dark);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 50px;
+}
+
+/* =====================================================
+   BANNER BENEFÍCIOS
+   ===================================================== */
+.banner-beneficios {
+  background: linear-gradient(135deg, var(--dark2), #16213e);
+  padding: 32px 0;
+}
+.beneficio-item {
+  text-align: center;
+  color: #fff;
+}
+.beneficio-item .icon {
+  font-size: 1.8rem;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 8px;
+}
+.beneficio-item h6 {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+.beneficio-item small { color: rgba(255,255,255,0.55); font-size: 0.75rem; }
+
+/* =====================================================
+   SIDEBAR FILTRO
+   ===================================================== */
+.filtro-card {
+  border-radius: var(--radius) !important;
+  border: 1px solid #e5e7eb !important;
+  background: #fff;
+}
+.filtro-card .card-header {
+  border-radius: var(--radius) var(--radius) 0 0 !important;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* =====================================================
+   PÁGINA DE PRODUTO
+   ===================================================== */
+.produto-img-wrapper {
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #f8f8f8;
+}
+.produto-img-wrapper img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+footer {
+  background: var(--dark) !important;
+}
+footer a:hover { color: var(--gold) !important; transition: color 0.2s; }
+
+/* =====================================================
+   MISC
+   ===================================================== */
+.btn-warning { font-weight: 700; }
+.progress { border-radius: 50px; }
+.progress-bar { border-radius: 50px; transition: width 0.6s ease; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+/* Container com fundo branco para páginas internas */
+.page-wrapper {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 32px;
+}
