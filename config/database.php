@@ -4,11 +4,11 @@
 // Configuração da conexão com o banco de dados
 // =====================================================
 
-define('DB_HOST', '192.168.0.158');
+define('DB_HOST', '127.0.0.1');
 define('DB_PORT', '3306');
 define('DB_NAME', 'loja_db');
-define('DB_USER', 'loja_user');
-define('DB_PASS', 'loja123');           
+define('DB_USER', 'root');
+define('DB_PASS', '');           
 
 /**
  * Retorna uma conexão PDO com o banco de dados.
