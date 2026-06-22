@@ -8,7 +8,7 @@ define('DB_HOST', '192.168.0.158');  // IP fixo do banco de dados
 define('DB_PORT', '3306');
 define('DB_NAME', 'loja_db');
 define('DB_USER', 'loja_user');
-define('DB_PASS', 'loja123');           // Altere para sua senha do MySQL
+define('DB_PASS', 'loja123');           
 
 /**
  * Retorna uma conexão PDO com o banco de dados.

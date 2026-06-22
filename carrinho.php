@@ -66,6 +66,62 @@ if ($acao === 'limpar') {
 }
 
 // =====================================================
+// NOVA AÇÃO: FINALIZAR A COMPRA (INSERE NO BANCO)
+// =====================================================
+if ($acao === 'finalizar') {
+    $carrinho = getCarrinhoArray();
+
+    if (empty($carrinho)) {
+        $_SESSION['mensagem']      = 'Seu carrinho está vazio.';
+        $_SESSION['tipo_mensagem'] = 'warning';
+        header('Location: /loja/carrinho.php');
+        exit;
+    }
+
+    try {
+        // Calcula os totais do pedido usando as funções
+        $subtotal = calcularTotal($carrinho);
+        $frete    = calcularFrete($subtotal);
+        $total    = $subtotal + $frete;
+
+        // 1. Inserir na tabela 'pedidos'
+        $sqlPedido = "INSERT INTO pedidos (usuario_id, total, status) VALUES (1, :total, 'Pendente')";
+        $stmtPedido = $pdo->prepare($sqlPedido);
+        $stmtPedido->execute([':total' => $total]);
+
+        // Pega o ID (número) do pedido que acabou de ser gerado
+        $pedidoId = $pdo->lastInsertId();
+
+        // 2. Inserir os produtos do carrinho na tabela 'itens_pedido'
+        $sqlItem = "INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco) VALUES (:pedido_id, :produto_id, :quantidade, :preco)";
+        $stmtItem = $pdo->prepare($sqlItem);
+
+        // FOREACH para percorrer o Array do carrinho e salvar item por item
+        foreach ($carrinho as $item) {
+            $stmtItem->execute([
+                ':pedido_id'  => $pedidoId,
+                ':produto_id' => $item['id'],
+                ':quantidade' => $item['quantidade'],
+                ':preco'      => $item['preco']
+            ]);
+        }
+
+        // 3. Esvaziar o carrinho da sessão e mostrar mensagem de sucesso
+        $_SESSION['carrinho']      = [];
+        $_SESSION['mensagem']      = "Pedido #$pedidoId registrado com sucesso no banco de dados!";
+        $_SESSION['tipo_mensagem'] = 'success';
+
+    } catch (PDOException $e) {
+        // Se a VirtualBox não estiver conectada ainda, exibe o erro ao invés de quebrar a página
+        $_SESSION['mensagem']      = 'Aviso de Banco de Dados (VM): ' . $e->getMessage();
+        $_SESSION['tipo_mensagem'] = 'warning';
+    }
+
+    header('Location: /loja/carrinho.php');
+    exit;
+}
+
+// =====================================================
 // Busca o carrinho (array estruturado) e valida
 // =====================================================
 $carrinho  = getCarrinhoArray();
@@ -91,9 +147,6 @@ $total    = $subtotal + $frete;
     </div>
 
     <?php if (empty($carrinho)): ?>
-    <!-- =====================================================
-         CARRINHO VAZIO
-         ===================================================== -->
     <div class="text-center py-5">
         <i class="bi bi-cart-x display-1 text-muted"></i>
         <h4 class="mt-3">Seu carrinho está vazio</h4>
@@ -104,18 +157,13 @@ $total    = $subtotal + $frete;
     </div>
 
     <?php else: ?>
-    <!-- =====================================================
-         CARRINHO COM ITENS
-         ===================================================== -->
     <form method="POST" action="/loja/carrinho.php">
         <input type="hidden" name="acao" value="atualizar">
         <div class="row g-4">
 
-            <!-- Tabela de itens -->
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body p-0">
-                        <!-- Bootstrap Componente: Table responsive -->
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-dark">
@@ -171,9 +219,7 @@ $total    = $subtotal + $frete;
                 </div>
             </div>
 
-            <!-- Resumo do pedido -->
             <div class="col-lg-4">
-                <!-- Bootstrap Componente: Card de resumo -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-dark text-white fw-bold">
                         <i class="bi bi-receipt me-1"></i>Resumo do Pedido
@@ -194,7 +240,6 @@ $total    = $subtotal + $frete;
                             <?php endif; ?>
                         </div>
 
-                        <!-- Progresso para frete grátis -->
                         <?php if ($frete > 0): ?>
                         <?php $faltaFrete = 200 - $subtotal; ?>
                         <div class="my-2">
@@ -217,12 +262,11 @@ $total    = $subtotal + $frete;
                             ou 12x de <?= formatarMoeda($total / 12) ?> no cartão
                         </small>
 
-                        <!-- Botão finalizar -->
                         <?php if ($validacao['valido']): ?>
                         <div class="d-grid mt-3">
-                            <a href="/loja/checkout.php" class="btn btn-warning btn-lg fw-bold">
+                            <button type="button" class="btn btn-warning btn-lg fw-bold" data-bs-toggle="modal" data-bs-target="#modalFinalizar">
                                 <i class="bi bi-bag-check me-2"></i>Finalizar Compra
-                        </a>
+                            </button>
                         </div>
                         <?php else: ?>
                         <div class="alert alert-danger small mt-3 mb-0">
@@ -233,7 +277,6 @@ $total    = $subtotal + $frete;
                     </div>
                 </div>
 
-                <!-- Info segurança -->
                 <div class="card border-0 bg-light mt-3">
                     <div class="card-body py-2 small text-center text-muted">
                         <i class="bi bi-shield-lock-fill text-success me-1"></i>
@@ -244,9 +287,6 @@ $total    = $subtotal + $frete;
         </div>
     </form>
 
-    <!-- =====================================================
-         MODAL DE FINALIZAÇÃO — Bootstrap Componente #7
-         ===================================================== -->
     <div class="modal fade" id="modalFinalizar" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -263,9 +303,8 @@ $total    = $subtotal + $frete;
                         (<?= $frete == 0 ? 'Com frete grátis!' : 'Frete: ' . formatarMoeda($frete) ?>)
                     </div>
                     <p class="text-secondary small">
-                        Este é um projeto acadêmico. O processamento real de pagamento não está implementado.
+                        Este é um projeto acadêmico. Seu pedido será processado e salvo no banco de dados!
                     </p>
-                    <!-- Resumo dos itens no modal (usa FOREACH) -->
                     <ul class="list-group list-group-flush">
                         <?php foreach ($carrinho as $item): ?>
                         <li class="list-group-item d-flex justify-content-between py-2">
@@ -282,7 +321,7 @@ $total    = $subtotal + $frete;
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <a href="/loja/carrinho.php?acao=limpar" class="btn btn-warning fw-bold">
+                    <a href="/loja/carrinho.php?acao=finalizar" class="btn btn-warning fw-bold">
                         <i class="bi bi-check-lg me-1"></i>Confirmar Pedido
                     </a>
                 </div>
