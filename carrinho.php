@@ -220,10 +220,9 @@ $total    = $subtotal + $frete;
                         <!-- Botão finalizar -->
                         <?php if ($validacao['valido']): ?>
                         <div class="d-grid mt-3">
-                            <button type="button" class="btn btn-warning btn-lg fw-bold"
-                                    data-bs-toggle="modal" data-bs-target="#modalFinalizar">
-                                <i class="bi bi-bag-check me-2"></i>Finalizar Compra
-                            </button>
+                            <a href="/loja/checkout.php" class="btn btn-warning btn-lg fw-bold">
+                            <i class="bi bi-bag-check me-2"></i>Finalizar Compra
+                        </a>
                         </div>
                         <?php else: ?>
                         <div class="alert alert-danger small mt-3 mb-0">
