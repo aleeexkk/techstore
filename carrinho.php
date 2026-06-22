@@ -221,7 +221,7 @@ $total    = $subtotal + $frete;
                         <?php if ($validacao['valido']): ?>
                         <div class="d-grid mt-3">
                             <a href="/loja/checkout.php" class="btn btn-warning btn-lg fw-bold">
-                            <i class="bi bi-bag-check me-2"></i>Finalizar Compra
+                                <i class="bi bi-bag-check me-2"></i>Finalizar Compra
                         </a>
                         </div>
                         <?php else: ?>
